@@ -89,13 +89,13 @@ cleanIndex url
   where idx = "index.html"
 
 cleanIndexUrls :: Item String -> Compiler (Item String)
-cleanIndexUrls = return . fmap (withUrls cleanIndex)
+cleanIndexUrls = return . fmap (withInternalUrls cleanIndex)
 
 cleanIndexHtmls :: Item String -> Compiler (Item String)
 cleanIndexHtmls = return . fmap (replaceAll "/index.html" $ const "/")
 
 stripHtmlExtensions :: Item String -> Compiler (Item String)
-stripHtmlExtensions = return . fmap (withUrls $ replaceAll ".html" (const "/"))
+stripHtmlExtensions = return . fmap (withInternalUrls $ replaceAll ".html" (const "/"))
 
 stripDateRoute :: Routes
 stripDateRoute = customRoute $ stripDate . toFilePath
@@ -104,7 +104,7 @@ stripDate :: String -> String
 stripDate = concat . splitRegex (mkRegex "([0-9]{4})\\-([0-9]{2})\\-([0-9]{2})\\-")
 
 stripDateUrls :: Item String -> Compiler (Item String)
-stripDateUrls = return . fmap (withUrls stripDate)
+stripDateUrls = return . fmap (withInternalUrls stripDate)
 
 tidyRoute :: Routes
 tidyRoute =
@@ -117,3 +117,6 @@ tidyUrls item = return item
     >>= cleanIndexUrls
     >>= stripHtmlExtensions
     >>= stripDateUrls
+
+withInternalUrls :: (String -> String) -> String -> String
+withInternalUrls fn = withUrls (\str -> if isExternal str then str else fn str)
