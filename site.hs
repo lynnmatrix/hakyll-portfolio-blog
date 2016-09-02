@@ -3,13 +3,16 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 import           System.FilePath (takeDirectory,takeBaseName,(</>))
-import           Data.List (isSuffixOf)
+import           Data.List (isSuffixOf,intersperse)
 import           Text.Regex (mkRegex,splitRegex)
+import           Data.Char (toLower,isAlphaNum)
+import           Control.Monad (mfilter)
+import qualified Data.Map.Lazy as M
 
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
+    match "images/**" $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -30,10 +33,8 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= tidyUrls
 
-    --match "projects/*" $ do
-    --    route $ customRoute $ (\fName -> "projects/" ++ fName ++ "/index.html") . takeBaseName . toFilePath
-    --    compile $ pandocCompiler
-    --        >>= loadAndApplyTemplate
+    match "projects/*" $ do
+        compile $ pandocCompiler
 
     create ["archive.html"] $ do
         route stripExtensionRoute
@@ -54,8 +55,11 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
+            projects <- loadAll "projects/*"
+
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
+                    listField "projects" projectCtx (return projects) `mappend`
                     constField "title" "Home"                `mappend`
                     defaultContext
 
@@ -73,6 +77,19 @@ postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+projectCtx :: Context String
+projectCtx =
+    imgSrcContext `mappend`
+    defaultContext
+
+imgSrcContext :: Context a
+imgSrcContext = field "imgSrc" $ \item -> do
+    metadata <- getMetadata (itemIdentifier item)
+    return $ maybe "/images/projects/no-image.png" titleToImgSrc (mfilter (not . null) $ M.lookup "title" metadata)
+
+titleToImgSrc :: String -> String
+titleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
 
 --------------------------------------------------------------------------------
 
@@ -120,3 +137,6 @@ tidyUrls item = return item
 
 withInternalUrls :: (String -> String) -> String -> String
 withInternalUrls fn = withUrls (\str -> if isExternal str then str else fn str)
+
+--------------------------------------------------------------------------------
+
