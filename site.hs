@@ -7,7 +7,6 @@ import           Data.List (isSuffixOf,intersperse)
 import           Text.Regex (mkRegex,splitRegex)
 import           Data.Char (toLower,isAlphaNum)
 import           Control.Monad (mfilter)
-import qualified Data.Map.Lazy as M
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -111,7 +110,7 @@ projectCtx tags =
 imgSrcContext :: Context a
 imgSrcContext = field "imgSrc" $ \item -> do
     metadata <- getMetadata (itemIdentifier item)
-    return $ maybe "/images/projects/no-image.png" titleToImgSrc (mfilter (not . null) $ M.lookup "title" metadata)
+    return $ maybe "/images/projects/no-image.png" titleToImgSrc (mfilter (not . null) $ lookupString "title" metadata)
 
 titleToImgSrc :: String -> String
 titleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
