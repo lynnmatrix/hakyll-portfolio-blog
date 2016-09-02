@@ -26,28 +26,50 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= tidyUrls
 
+    tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
+
     match "posts/*" $ do
         route tidyRoute
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
+            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
             >>= tidyUrls
 
     match "projects/*" $ do
-        compile $ pandocCompiler
+        compile pandocCompiler
 
     create ["archive.html"] $ do
         route stripExtensionRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= tidyUrls
+
+    tagsRules tags $ \tag pattern -> do
+        route idRoute
+        compile $ do
+            let takeOnly p = fmap (filter $ matches p . itemIdentifier)
+
+            posts <- recentFirst =<< takeOnly "posts/*" (loadAll pattern)
+            projects <- takeOnly "projects/*" (loadAll pattern)
+
+            let tagCtx =
+                    constField "title" ("Tag: " ++ tag) `mappend`
+                    constField "tag" tag `mappend`
+                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "projects" (projectCtx tags) (return projects) `mappend`
+                    defaultContext
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/tag.html" (tagCtx)
+                >>= loadAndApplyTemplate "templates/default.html" (tagCtx)
                 >>= tidyUrls
 
 
@@ -58,8 +80,8 @@ main = hakyll $ do
             projects <- loadAll "projects/*"
 
             let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    listField "projects" projectCtx (return projects) `mappend`
+                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "projects" (projectCtx tags) (return projects) `mappend`
                     constField "title" "Home"                `mappend`
                     defaultContext
 
@@ -73,13 +95,15 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 
-postCtx :: Context String
-postCtx =
+postCtx :: Tags -> Context String
+postCtx tags =
+    tagsField "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
 
-projectCtx :: Context String
-projectCtx =
+projectCtx :: Tags -> Context String
+projectCtx tags =
+    tagsField "tags" tags `mappend`
     imgSrcContext `mappend`
     defaultContext
 
@@ -139,4 +163,3 @@ withInternalUrls :: (String -> String) -> String -> String
 withInternalUrls fn = withUrls (\str -> if isExternal str then str else fn str)
 
 --------------------------------------------------------------------------------
-
