@@ -80,6 +80,7 @@ main = hakyll $ do
             projects <- loadAll "projects/*"
 
             let indexCtx =
+                    tagCloudField "tagCloud" 75 300 tags `mappend`
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     listField "projects" (projectCtx tags) (return projects) `mappend`
                     constField "title" "Home"                `mappend`
