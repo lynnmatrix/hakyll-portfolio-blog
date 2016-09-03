@@ -30,6 +30,7 @@ main = hakyll $ do
     match "posts/*" $ do
         route tidyRoute
         compile $ pandocCompiler
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
             >>= tidyUrls
@@ -97,6 +98,7 @@ main = hakyll $ do
 
 postCtx :: Tags -> Context String
 postCtx tags =
+    teaserField "teaser" "content" `mappend`
     tagsField "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext

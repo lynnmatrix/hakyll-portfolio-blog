@@ -1,7 +1,15 @@
-<ul>
-    $for(posts)$
-        <li>
-            <a href="$url$">$title$</a> - $date$
-        </li>
-    $endfor$
-</ul>
+$for(posts)$
+    <div>
+        <h2><a href="$url$">$title$</a></h2>
+        $date$
+        <p>
+            $if(teaser)$
+                $teaser$
+            $else$
+                $body$
+            $endif$
+        </p>
+        <a href="$url$">Read More...</a>
+        <hr>
+    </div>
+$endfor$
