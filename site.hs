@@ -11,6 +11,8 @@ import           Control.Monad (mfilter)
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
+    tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
+
     match "images/**" $ do
         route   idRoute
         compile copyFileCompiler
@@ -18,14 +20,6 @@ main = hakyll $ do
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
-
-    match (fromList ["about.rst", "contact.markdown"]) $ do
-        route stripExtensionRoute
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= tidyUrls
-
-    tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
 
     match "posts/*" $ do
         route tidyRoute
@@ -45,7 +39,7 @@ main = hakyll $ do
             let archiveCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
-                    defaultContext
+                    baseContext tags
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -65,7 +59,7 @@ main = hakyll $ do
                     constField "tag" tag `mappend`
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     listField "projects" (projectCtx tags) (return projects) `mappend`
-                    defaultContext
+                    baseContext tags
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag.html" (tagCtx)
@@ -80,11 +74,10 @@ main = hakyll $ do
             projects <- recentFirst =<< loadAll "projects/*"
 
             let indexCtx =
-                    tagCloudField "tagCloud" 75 300 tags `mappend`
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     listField "projects" (projectCtx tags) (return projects) `mappend`
                     constField "title" "Home"                `mappend`
-                    defaultContext
+                    baseContext tags
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
@@ -101,7 +94,7 @@ postCtx tags =
     teaserField "teaser" "content" `mappend`
     tagsField "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
-    defaultContext `mappend`
+    baseContext tags `mappend`
     constField "author" "Rob"
 
 
@@ -109,7 +102,7 @@ projectCtx :: Tags -> Context String
 projectCtx tags =
     tagsField "tags" tags `mappend`
     imgSrcContext `mappend`
-    defaultContext
+    baseContext tags
 
 imgSrcContext :: Context a
 imgSrcContext = field "imgSrc" $ \item -> do
@@ -118,6 +111,11 @@ imgSrcContext = field "imgSrc" $ \item -> do
 
 titleToImgSrc :: String -> String
 titleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
+
+baseContext :: Tags -> Context String
+baseContext tags =
+    tagCloudField "tagCloud" 75 300 tags `mappend`
+    defaultContext
 
 --------------------------------------------------------------------------------
 
