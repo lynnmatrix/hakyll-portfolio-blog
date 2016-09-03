@@ -31,8 +31,8 @@ main = hakyll $ do
         route tidyRoute
         compile $ pandocCompiler
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
-            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
+            >>= loadAndApplyTemplateWithIdentifier "templates/post.html"    (flip postCtx tags)
+            >>= loadAndApplyTemplateWithIdentifier "templates/default.html" (flip postCtx tags)
             >>= tidyUrls
 
     match "projects/*" $ do
@@ -43,7 +43,7 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
-                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "posts" (postCtx Nothing tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
@@ -63,7 +63,7 @@ main = hakyll $ do
             let tagCtx =
                     constField "title" ("Tag: " ++ tag) `mappend`
                     constField "tag" tag `mappend`
-                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "posts" (postCtx Nothing tags) (return posts) `mappend`
                     listField "projects" (projectCtx tags) (return projects) `mappend`
                     defaultContext
 
@@ -81,7 +81,7 @@ main = hakyll $ do
 
             let indexCtx =
                     tagCloudField "tagCloud" 75 300 tags `mappend`
-                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "posts" (postCtx Nothing tags) (return posts) `mappend`
                     listField "projects" (projectCtx tags) (return projects) `mappend`
                     constField "title" "Home"                `mappend`
                     defaultContext
@@ -96,10 +96,10 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 
-postCtx :: Tags -> Context String
-postCtx tags =
+postCtx :: Maybe Identifier -> Tags -> Context String
+postCtx ident tags =
     teaserField "teaser" "content" `mappend`
-    tagsField "tags" tags `mappend`
+    tagsFieldIfAny ident "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
 
@@ -116,6 +116,18 @@ imgSrcContext = field "imgSrc" $ \item -> do
 
 titleToImgSrc :: String -> String
 titleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
+
+tagsFieldIfAny :: Maybe Identifier -> String -> Tags -> Context String
+tagsFieldIfAny (Just ident) label tags =
+    if any (elem ident . snd) $ tagsMap tags then
+        tagsField label tags
+    else
+        missingField
+tagsFieldIfAny Nothing label tags = tagsField label tags
+
+loadAndApplyTemplateWithIdentifier :: Identifier -> (Maybe Identifier -> Context a) -> Item a -> Compiler (Item String)
+loadAndApplyTemplateWithIdentifier pId contextFn item =
+    loadAndApplyTemplate pId (contextFn (Just $ itemIdentifier item)) item
 
 --------------------------------------------------------------------------------
 
@@ -165,3 +177,4 @@ withInternalUrls :: (String -> String) -> String -> String
 withInternalUrls fn = withUrls (\str -> if isExternal str then str else fn str)
 
 --------------------------------------------------------------------------------
+
