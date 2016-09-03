@@ -58,7 +58,7 @@ main = hakyll $ do
             let takeOnly p = fmap (filter $ matches p . itemIdentifier)
 
             posts <- recentFirst =<< takeOnly "posts/*" (loadAll pattern)
-            projects <- takeOnly "projects/*" (loadAll pattern)
+            projects <- recentFirst =<< takeOnly "projects/*" (loadAll pattern)
 
             let tagCtx =
                     constField "title" ("Tag: " ++ tag) `mappend`
@@ -77,7 +77,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
-            projects <- loadAll "projects/*"
+            projects <- recentFirst =<< loadAll "projects/*"
 
             let indexCtx =
                     tagCloudField "tagCloud" 75 300 tags `mappend`
@@ -101,7 +101,9 @@ postCtx tags =
     teaserField "teaser" "content" `mappend`
     tagsField "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+    defaultContext `mappend`
+    constField "author" "Rob"
+
 
 projectCtx :: Tags -> Context String
 projectCtx tags =

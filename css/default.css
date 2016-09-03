@@ -1,56 +1,61 @@
-body {
-    color: black;
-    font-size: 16px;
-    margin: 0px auto 0px auto;
-    width: 600px;
+@import 'https://fonts.googleapis.com/css?family=Open+Sans+Condensed';
+
+html, body {
+    font-family: helvetica, arial, verdana, sans-serif;
 }
 
-div#header {
-    border-bottom: 2px solid black;
-    margin-bottom: 30px;
-    padding: 12px 0px 12px 0px;
+.sidebar {
+
 }
 
-div#logo a {
-    color: black;
-    float: left;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
+.project-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-div#header #navigation {
-    text-align: right;
+.project-card {
+    flex: 1;
+    max-width: 250px;
+    min-width: 200px;
+    margin: 1em;
+    border-radius: 0.2em;
+    overflow: hidden;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.8);
 }
 
-div#header #navigation a {
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 12px;
-    text-decoration: none;
-    text-transform: uppercase;
+.project-card .text-container {
+    padding: 0.4em;
+    padding-top: 0;
 }
 
-div#footer {
-    border-top: solid 2px black;
-    color: #555;
-    font-size: 12px;
-    margin-top: 30px;
-    padding: 12px 0px 12px 0px;
-    text-align: right;
+.project-card .links .link-separator {
+    display: inline;
 }
 
-h1 {
+.project-card .links .link-separator:last-child,
+.project-card .links .link-separator:first-child,
+.project-card .links .link-separator:nth-child(2) {
+    display: none;
+}
+
+.project-card .img-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    height: 0;
+    background-color: black;
+}
+
+.project-card .img-container img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+.project-card h2 {
+    font-family: "Open Sans Condensed", sans-serif;
+    font-weight: normal;
     font-size: 24px;
-}
-
-h2 {
-    font-size: 20px;
-}
-
-div.info {
-    color: #555;
-    font-size: 14px;
-    font-style: italic;
 }
