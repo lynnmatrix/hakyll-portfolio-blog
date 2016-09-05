@@ -48,8 +48,22 @@ main = do
                         baseContext tags
 
                 makeItem ""
-                    >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                    >>= loadAndApplyTemplate "templates/post-list.html" archiveCtx
                     >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                    >>= tidyUrls
+
+        create ["portfolio.html"] $ do
+            route stripExtensionRoute
+            compile $ do
+                projects <- recentFirst =<< loadAll "projects/*"
+                let projCtx =
+                        listField "projects" (projectCtx tags) (return projects) `mappend`
+                        constField "title" "Portfolio" `mappend`
+                        baseContext tags
+
+                makeItem ""
+                    >>= loadAndApplyTemplate "templates/portfolio.html" projCtx
+                    >>= loadAndApplyTemplate "templates/default.html" projCtx
                     >>= tidyUrls
 
         tagsRules tags $ \tag pattern -> do

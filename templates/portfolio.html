@@ -1,0 +1,12 @@
+<h2>Featured Projects</h2>
+$partial("templates/featured-projects.html")$
+
+<h2>Projects Archive</h2>
+<div class="project-list">
+$for(projects)$
+    $if(featured)$
+    $else$
+        $partial("templates/project.html")$
+    $endif$
+$endfor$
+</div>

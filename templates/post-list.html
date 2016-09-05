@@ -1,14 +1,19 @@
 $for(posts)$
-    <div>
-        <h2><a href="$url$">$title$</a></h2>
-        $date$
-        <p>
+    <div class="post-teaser">
+        <a href="$url$" class="title">$title$</a>
+        <span class="date">
+            - $date$
+            <span class="tags">
+                <i class="fa fa-tags" aria-hidden="true"></i> $tags$
+            </span>
+        </span>
+        <div class="teaser">
             $if(teaser)$
                 $teaser$
+                <a href="$url$">Read more...</a>
             $else$
                 $body$
             $endif$
-        </p>
-        <a href="$url$">Read More...</a>
+        </div>
     </div>
 $endfor$
