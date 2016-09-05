@@ -30,6 +30,7 @@ main = do
             compile $ pandocCompiler
                 >>= saveSnapshot "content"
                 >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
+                >>= saveSnapshot "contentAfterPostTemplate"
                 >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
                 >>= tidyUrls
 
@@ -52,6 +53,16 @@ main = do
                     >>= loadAndApplyTemplate "templates/post-list.html" archiveCtx
                     >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                     >>= tidyUrls
+
+        create ["rss.xml"] $ do
+            route idRoute
+            compile $ do
+                let feedCtx =
+                        field "url" (fmap (maybe "" $ (:) '/' . cleanIndex) . getRoute . itemIdentifier) `mappend`
+                        postCtx tags `mappend`
+                        bodyField "description"
+                posts <- fmap (map cleanupRssItem . take 10) . recentFirst =<< loadAllSnapshots "posts/*" "contentAfterPostTemplate"
+                renderRss myFeedConfiguration feedCtx posts
 
         create ["portfolio.html"] $ do
             route stripExtensionRoute
@@ -190,3 +201,19 @@ withInternalUrls :: (String -> String) -> String -> String
 withInternalUrls fn = withUrls (\str -> if isExternal str then str else fn str)
 
 --------------------------------------------------------------------------------
+
+myFeedConfiguration :: FeedConfiguration
+myFeedConfiguration = FeedConfiguration
+    { feedTitle       = "Blog - Rob Whitaker"
+    , feedDescription = "A blog about cool things tech and writing!"
+    , feedAuthorName  = "Rob Whitaker"
+    , feedAuthorEmail = "robjameswhitaker@gmail.com"
+    , feedRoot        = "https://robwhitaker.github.io"
+    }
+
+cleanupRssItem :: Item String -> Item String
+cleanupRssItem =
+    fmap (withInternalUrls $ replaceAll ".html" (const "/")) .
+    fmap (withInternalUrls cleanIndex)
+
+
