@@ -45,6 +45,7 @@ main = do
                 let archiveCtx =
                         listField "posts" (postCtx tags) (return posts) `mappend`
                         constField "title" "Archives"            `mappend`
+                        constField "heading" "Archives"            `mappend`
                         baseContext tags
 
                 makeItem ""
@@ -59,6 +60,7 @@ main = do
                 let projCtx =
                         listField "projects" (projectCtx tags) (return projects) `mappend`
                         constField "title" "Portfolio" `mappend`
+                        constField "heading" "Portfolio" `mappend`
                         baseContext tags
 
                 makeItem ""
@@ -97,7 +99,8 @@ main = do
                 let indexCtx =
                         listField "posts" (postCtx tags) (return posts) `mappend`
                         listField "projects" (projectCtx tags) (return projects) `mappend`
-                        constField "title" "Home"                `mappend`
+                        constField "title" "Home" `mappend`
+                        constField "banner" "/images/banner.png"                `mappend`
                         constField "about" about `mappend`
                         baseContext tags
 
