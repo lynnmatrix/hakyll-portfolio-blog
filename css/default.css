@@ -91,6 +91,21 @@ h3 {
     background-color: rgba(0,0,0,0.5);
 }
 
+
+#sidebar .social-buttons {
+    text-align: center;
+    margin: 0.8em 0 0.5em;
+}
+
+#sidebar .social-buttons > a {
+    font-size: 30px;
+    margin: 0 0.2em;
+}
+
+#sidebar .social-buttons > a:hover {
+    color: #487FD9;
+}
+
 #sidebar nav {
     margin: 1em 0;
     display: flex;
