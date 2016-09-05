@@ -134,26 +134,74 @@ h3 {
     background-color: #487FD9;
     height: 100%;
     width: 0;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+    animation-delay: 0.5s;
 }
 
 #sidebar .skill-bar > div.s1-5-bar {
-    width: 20%;
+    animation-name: skill-fill-1;
 }
 
 #sidebar .skill-bar > div.s2-5-bar {
-    width: 40%;
+    animation-name: skill-fill-2;
 }
 
 #sidebar .skill-bar > div.s3-5-bar {
-    width: 60%;
+    animation-name: skill-fill-3;
 }
 
 #sidebar .skill-bar > div.s4-5-bar {
-    width: 80%;
+    animation-name: skill-fill-4;
 }
 
 #sidebar .skill-bar > div.s5-5-bar {
-    width: 100%;
+    animation-name: skill-fill-5;
+}
+
+@keyframes skill-fill-1 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 20%;
+    }
+}
+
+@keyframes skill-fill-2 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 40%;
+    }
+}
+
+@keyframes skill-fill-3 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 60%;
+    }
+}
+
+@keyframes skill-fill-4 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 80%;
+    }
+}
+
+@keyframes skill-fill-5 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
 }
 
 #sidebar .name {
