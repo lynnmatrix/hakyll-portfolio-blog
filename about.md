@@ -1,7 +1,5 @@
-Hi! I'm Rob Whitaker, a 21 year old web developer, software engineer, and functional programming enthusiast. I recently graduated from Marist College with a Bachelors in Computer Science and a concentration in Game Design and am currently employed as a Software Engineer (contract) at Unlockable Inc.
+Hi! I'm Rob Whitaker. I'm a writer, developer, and functional programming enthusiast, currently employed at IBM as a Software Engineer.
 
-Some technologies I enjoy include Elm (functional reactive web programming), JavaScript, Haskell, and Unity, and I am always open to learning new programming languages and development tools. I am passionate about writing code that is clean, efficient, reusable, and easy to debug and maintain.
+I was born in 1993, started playing with both game design and web development in middle school through high school, and graduated from Marist College in 2015 with a Bachelors in Computer Science and a concentration in Game Design.
 
-During my spare time, I always have a personal development project on hand, whether it be a web application, a game of some kind, or even a command line tool. When I'm not programming, I enjoy reading, writing short stories and novellas, playing the piano, and gaming.
-
-With my varied experience and enthusiasm for learning, I believe I would be a strong asset to any development team. If you are interested in contacting me, feel free to shoot me an email. I'd love to hear from you!
+When I'm not programming, I enjoy reading, writing short stories, drinking coffee, playing the piano, longboarding, and gaming.

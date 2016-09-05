@@ -1,5 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
+import qualified GHC.IO.Encoding as E
+
 import           Data.Monoid (mappend)
 import           Hakyll
 import           System.FilePath (takeDirectory,takeBaseName,(</>))
@@ -10,81 +12,87 @@ import           Control.Monad (mfilter)
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
-    tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
+main = do
+    E.setLocaleEncoding E.utf8
+    hakyll $ do
+        tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
 
-    match "images/**" $ do
-        route   idRoute
-        compile copyFileCompiler
+        match "images/**" $ do
+            route   idRoute
+            compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+        match "css/*" $ do
+            route   idRoute
+            compile compressCssCompiler
 
-    match "posts/*" $ do
-        route tidyRoute
-        compile $ pandocCompiler
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
-            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
-            >>= tidyUrls
-
-    match "projects/*" $ do
-        compile pandocCompiler
-
-    create ["archive.html"] $ do
-        route stripExtensionRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let archiveCtx =
-                    listField "posts" (postCtx tags) (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
-                    baseContext tags
-
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+        match "posts/*" $ do
+            route tidyRoute
+            compile $ pandocCompiler
+                >>= saveSnapshot "content"
+                >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
+                >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
                 >>= tidyUrls
 
-    tagsRules tags $ \tag pattern -> do
-        route idRoute
-        compile $ do
-            let takeOnly p = fmap (filter $ matches p . itemIdentifier)
+        match "about.md" (compile $ pandocCompiler >>= tidyUrls)
 
-            posts <- recentFirst =<< takeOnly "posts/*" (loadAll pattern)
-            projects <- recentFirst =<< takeOnly "projects/*" (loadAll pattern)
+        match "projects/*" $ do
+            compile pandocCompiler
 
-            let tagCtx =
-                    constField "title" ("Tag: " ++ tag) `mappend`
-                    constField "tag" tag `mappend`
-                    listField "posts" (postCtx tags) (return posts) `mappend`
-                    listField "projects" (projectCtx tags) (return projects) `mappend`
-                    baseContext tags
+        create ["archive.html"] $ do
+            route stripExtensionRoute
+            compile $ do
+                posts <- recentFirst =<< loadAll "posts/*"
+                let archiveCtx =
+                        listField "posts" (postCtx tags) (return posts) `mappend`
+                        constField "title" "Archives"            `mappend`
+                        baseContext tags
 
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/tag.html" (tagCtx)
-                >>= loadAndApplyTemplate "templates/default.html" (tagCtx)
-                >>= tidyUrls
+                makeItem ""
+                    >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                    >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                    >>= tidyUrls
+
+        tagsRules tags $ \tag pattern -> do
+            route idRoute
+            compile $ do
+                let takeOnly p = fmap (filter $ matches p . itemIdentifier)
+
+                posts <- recentFirst =<< takeOnly "posts/*" (loadAll pattern)
+                projects <- recentFirst =<< takeOnly "projects/*" (loadAll pattern)
+
+                let tagCtx =
+                        constField "title" ("Tag: " ++ tag) `mappend`
+                        constField "tag" tag `mappend`
+                        listField "posts" (postCtx tags) (return posts) `mappend`
+                        listField "projects" (projectCtx tags) (return projects) `mappend`
+                        baseContext tags
+
+                makeItem ""
+                    >>= loadAndApplyTemplate "templates/tag.html" (tagCtx)
+                    >>= loadAndApplyTemplate "templates/default.html" (tagCtx)
+                    >>= tidyUrls
 
 
-    match "index.html" $ do
-        route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            projects <- recentFirst =<< loadAll "projects/*"
+        match "index.html" $ do
+            route idRoute
+            compile $ do
+                posts <- recentFirst =<< loadAll "posts/*"
+                projects <- recentFirst =<< loadAll "projects/*"
+                about <- loadBody "about.md" :: Compiler String
 
-            let indexCtx =
-                    listField "posts" (postCtx tags) (return posts) `mappend`
-                    listField "projects" (projectCtx tags) (return projects) `mappend`
-                    constField "title" "Home"                `mappend`
-                    baseContext tags
+                let indexCtx =
+                        listField "posts" (postCtx tags) (return posts) `mappend`
+                        listField "projects" (projectCtx tags) (return projects) `mappend`
+                        constField "title" "Home"                `mappend`
+                        constField "about" about `mappend`
+                        baseContext tags
 
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= tidyUrls
+                getResourceBody
+                    >>= applyAsTemplate indexCtx
+                    >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                    >>= tidyUrls
 
-    match "templates/*" $ compile templateBodyCompiler
+        match "templates/*" $ compile templateBodyCompiler
 
 
 --------------------------------------------------------------------------------
