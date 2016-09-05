@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import qualified GHC.IO.Encoding as E
 
-import           Data.Monoid (mappend)
+import           Data.Monoid (mappend,mconcat)
 import           Hakyll
 import           System.FilePath (takeDirectory,takeBaseName,(</>))
 import           Data.List (isSuffixOf,intersperse)
@@ -107,13 +107,15 @@ main = do
                 projects <- recentFirst =<< loadAll "projects/*"
                 about <- loadBody "about.md" :: Compiler String
 
-                let indexCtx =
-                        listField "posts" (postCtx tags) (return posts) `mappend`
-                        listField "projects" (projectCtx tags) (return projects) `mappend`
-                        constField "title" "Home" `mappend`
-                        constField "banner" "/images/banner.png"                `mappend`
-                        constField "about" about `mappend`
-                        baseContext tags
+                let indexCtx = mconcat
+                        [ listField "posts" (postCtx tags) (return posts)
+                        , listField "projects" (projectCtx tags) (return projects)
+                        , constField "title" "Home"
+                        , constField "heading" "Robert J. Whitaker"
+                        --, constField "banner" "/images/banner.png"                `mappend`
+                        , constField "about" about
+                        , baseContext tags
+                        ]
 
                 getResourceBody
                     >>= applyAsTemplate indexCtx
@@ -127,6 +129,7 @@ main = do
 
 postCtx :: Tags -> Context String
 postCtx tags =
+    fieldFromMetadata "heading" "title" (maybe "" id) `mappend`
     teaserField "teaser" "content" `mappend`
     tagsField "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
@@ -137,21 +140,22 @@ postCtx tags =
 projectCtx :: Tags -> Context String
 projectCtx tags =
     tagsField "tags" tags `mappend`
-    imgSrcContext `mappend`
+    fieldFromMetadata "imgSrc" "title" (maybe "/images/projects/no-image.png" projectTitleToImgSrc) `mappend`
     baseContext tags
 
-imgSrcContext :: Context a
-imgSrcContext = field "imgSrc" $ \item -> do
-    metadata <- getMetadata (itemIdentifier item)
-    return $ maybe "/images/projects/no-image.png" titleToImgSrc (mfilter (not . null) $ lookupString "title" metadata)
-
-titleToImgSrc :: String -> String
-titleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
+projectTitleToImgSrc :: String -> String
+projectTitleToImgSrc = (\src -> "/images/projects/" ++ src ++ ".png") . concat . intersperse "-" . map (filter isAlphaNum) . words . map toLower
 
 baseContext :: Tags -> Context String
 baseContext tags =
     tagCloudField "tagCloud" 75 300 tags `mappend`
     defaultContext
+
+fieldFromMetadata :: String -> String -> (Maybe String -> String) -> Context a
+fieldFromMetadata label metaField fn =
+    field label $ \item -> do
+        metadata <- getMetadata (itemIdentifier item)
+        return $ fn (mfilter (not . null) $ lookupString metaField metadata)
 
 --------------------------------------------------------------------------------
 
