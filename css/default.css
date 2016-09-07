@@ -443,6 +443,16 @@ a:hover {
     margin: 1.5em 0 1em 0;
 }
 
+.post h1 {
+    font-size: 36px;
+}
+
+.post h1.post-title {
+    text-align: center;
+    margin: 0.5em 0em;
+    font-size: 42px;
+}
+
 .teaser h1, .teaser h2, .teaser h3, .teaser h4, .teaser h5, .teaser h6 {
     font-weight: normal;
     color: #999;
