@@ -129,6 +129,7 @@ main = do
 
 postCtx :: Tags -> Context String
 postCtx tags =
+    field "url" (fmap (maybe "" $ (:) '/' . cleanIndex) . getRoute . itemIdentifier) `mappend`
     fieldFromMetadata "heading" "title" (maybe "" id) `mappend`
     teaserField "teaser" "content" `mappend`
     tagsField "tags" tags `mappend`

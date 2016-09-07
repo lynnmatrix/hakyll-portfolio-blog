@@ -43,7 +43,13 @@ h3 {
     /*background-position: center;*/
 }
 
+i {
+    color: #487FD9;
+}
 
+#sidebar i {
+    color: white;
+}
 
 #sidebar {
     position: fixed;
@@ -52,7 +58,7 @@ h3 {
     bottom: 0;
     min-width: 200px;
     width: 250px;
-    background: url("/images/use_your_illusion.png");
+    background: #202020;
     white-space: normal;
     box-shadow: 0px 2px 10px black;
     overflow-x: hidden;
@@ -105,10 +111,13 @@ h3 {
 #sidebar .social-buttons > a {
     font-size: 30px;
     margin: 0 0.2em;
+}
+
+#sidebar .social-buttons > a i {
     transition: all 0.4s;
 }
 
-#sidebar .social-buttons > a:hover {
+#sidebar .social-buttons > a:hover i {
     color: #487FD9;
 }
 
@@ -405,3 +414,46 @@ a:hover {
 #sidebar a {
     color: white;
 }
+
+.post {}
+
+.post .content {
+    line-height: 150%;
+    font-size: 105%;
+}
+
+.post .share {}
+
+.post .info {
+    line-height: 150%;
+    text-align: right;
+    margin: 1.5em 0;
+}
+
+.post .info .spacer {
+    margin-right: 1em;
+}
+
+.post h1, .post h2, .post h3, .post h4, .post h5, .post h6,
+.teaser h1, .teaser h2, .teaser h3, .teaser h4, .teaser h5, .teaser h6 {
+    font-family: "Raleway", "Open Sans Condensed";
+    font-weight: bold;
+    text-align: left;
+    border: none;
+    margin: 1.5em 0 1em 0;
+}
+
+.teaser h1, .teaser h2, .teaser h3, .teaser h4, .teaser h5, .teaser h6 {
+    font-weight: normal;
+    color: #999;
+}
+
+.sourceCode {
+    background-color: #202020;
+    color: white;
+}
+
+.sourceCode.haskell .ot { color: #55ff55; }
+.sourceCode.haskell .dt { color: violet; }
+.sourceCode.haskell .kw { color: #ff5555; }
+.sourceCode.haskell .st { color: #ffff55; }
