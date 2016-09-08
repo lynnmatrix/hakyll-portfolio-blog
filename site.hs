@@ -50,7 +50,7 @@ main = do
                         baseContext tags
 
                 makeItem ""
-                    >>= loadAndApplyTemplate "templates/post-list.html" archiveCtx
+                    >>= loadAndApplyTemplate "templates/post-teaser-list.html" archiveCtx
                     >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                     >>= tidyUrls
 

@@ -1,4 +1,3 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans+Condensed';
 @import 'https://fonts.googleapis.com/css?family=Raleway';
 
 html, body {
@@ -14,7 +13,7 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Raleway", "Open Sans Condensed";
+    font-family: "Raleway";
     font-weight: normal;
 }
 
@@ -37,10 +36,6 @@ h3 {
 
 .banner {
     width: 100%;
-    /*height: 250px;*/
-    /*overflow: hidden;*/
-    /*background-size: cover;*/
-    /*background-position: center;*/
 }
 
 i {
@@ -278,8 +273,7 @@ i {
     padding-right: 1.5em;
 }
 
-#footer {
-    width: 100%;
+footer {
     text-align: center;
 }
 
@@ -335,7 +329,7 @@ i {
 }
 
 .project-card h2 {
-    font-family: "Open Sans Condensed", sans-serif;
+    font-family: "Raleway";
     font-weight: normal;
     font-size: 24px;
 }
@@ -364,7 +358,22 @@ i {
 }
 
 .post-teaser {
-    margin: 2em 0;
+    margin: 2em 0 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.post-teaser:last-child {
+    border-bottom: none;
+}
+
+.post-teaser .info-line {
+    font-size: 12px;
+    text-align: right;
+    margin-bottom: 1.5em;
+}
+
+.post-teaser .info-line span {
+    margin-left: 1em;
 }
 
 .post-teaser .teaser-banner {
@@ -383,12 +392,7 @@ i {
 }
 
 .post-teaser a.title {
-    font-size: 18px;
-}
-
-.post-teaser span.date {
-    font-style: italic;
-    font-size: 12px;
+    font-size: 36px;
 }
 
 .post-teaser .teaser {
@@ -396,10 +400,6 @@ i {
     font-size: 15px;
     padding-left: 2em;
     box-sizing: border-box;
-}
-
-.post-teaser span.tags {
-    margin-left: 1em;
 }
 
 a {
@@ -436,7 +436,7 @@ a:hover {
 
 .post h1, .post h2, .post h3, .post h4, .post h5, .post h6,
 .teaser h1, .teaser h2, .teaser h3, .teaser h4, .teaser h5, .teaser h6 {
-    font-family: "Raleway", "Open Sans Condensed";
+    font-family: "Raleway";
     font-weight: bold;
     text-align: left;
     border: none;
