@@ -103,7 +103,7 @@ main = do
         match "index.html" $ do
             route idRoute
             compile $ do
-                posts <- recentFirst =<< loadAll "posts/*"
+                posts <- fmap (take 3) . recentFirst =<< loadAll "posts/*"
                 projects <- recentFirst =<< loadAll "projects/*"
                 about <- loadBody "about.md" :: Compiler String
 

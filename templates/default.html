@@ -42,18 +42,16 @@
                     Archives
                 </a>
 
-                <a href="https://drive.google.com/file/d/0B-hWGbB5oVUfRjVpdGlpNTNmZkk/view" target="_blank">
-                    <i class="fa fa-file-text" aria-hidden="true"></i>
-                    Resume
-                </a>
-
-                <a href="mailto:robjameswhitaker@gmail.com" target="_blank">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                    Contact
-                </a>
             </nav>
             <hr>
             <div class="sidebar-fields">
+                <h3><i class="fa fa-envelope" aria-hidden="true"></i> Contact</h3>
+                <div class="contact-row"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Beacon, NY</div>
+                <div class="contact-row">
+                    <i class="fa fa-at" aria-hidden="true"></i>
+                    <a href="mailto:robjameswhitaker@gmail.com" target="_blank" class="smaller">robjameswhitaker@gmail.com</a>
+                </div>
+
                 <h3><i class="fa fa-certificate" aria-hidden="true"></i> Skills</h3>
                 <div class="skills">
                     Elm
@@ -90,5 +88,14 @@
                 </footer>
             </div>
         </div>
+        <script>
+            var sidebar = document.getElementById("sidebar");
+            sidebar.addEventListener("mouseover", function() {
+                if(this.scrollHeight > this.offsetHeight)
+                    this.classList.add("overflowed");
+                else
+                    this.classList.remove("overflowed");
+            });
+        </script>
     </body>
 </html>

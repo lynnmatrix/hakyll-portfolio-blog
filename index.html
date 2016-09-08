@@ -3,15 +3,13 @@ index: yes
 ---
 
 <div class="two-column">
-    <div class="posts-column">
-        <h2>About Me</h2>
+    <div class="posts-column resume">
         $about$
-
-        <h2>Recent Posts</h2>
-        $partial("templates/post-teaser-list.html")$
-        <p>…or you can find more in the <a href="/archive.html">archives</a>.</p>
     </div>
     <div class="projects-column">
+        <h2>Recent Posts</h2>
+        $partial("templates/post-list.html")$
+
         <h2>Featured Projects</h2>
         $partial("templates/featured-projects.html")$
     </div>
