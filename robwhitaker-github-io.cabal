@@ -5,9 +5,12 @@ cabal-version:      >= 1.10
 
 executable site
   main-is:          site.hs
+  other-modules:    Resume
   build-depends:    base
                   , hakyll
                   , filepath
                   , regex-compat
+                  , aeson
+                  , bytestring
   ghc-options:      -threaded
   default-language: Haskell2010

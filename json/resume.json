@@ -1,0 +1,67 @@
+{
+    "contact":{
+        "address":"Beacon, NY",
+        "email":"robjameswhitaker@gmail.com",
+        "website":"www.robwhitaker.com",
+        "github":"www.github.com/robwhitaker"
+    },
+    "education":[
+        {
+            "school":{
+                "schoolName":"Marist College",
+                "schoolLocation":"Poughkeepsie, NY"
+            },
+            "graduationDate":"May 2015",
+            "gpa":"3.7",
+            "graduatingAchievement":"Magna Cum Laude",
+            "scholarships":[
+                "Marist College Presidential Scholarship",
+                "William J. & Valerie Cadden Scholarship in Computer Science"
+            ],
+            "otherAchievments":[
+                "Dean's List 2011-2015"
+            ]
+        },
+        {
+            "school":{
+                "schoolName":"Regis High School",
+                "schoolLocation":"New York, NY"
+            },
+            "graduationDate":"Class of 2011"
+        }
+    ],
+    "technicalSkills":{
+        "proficient":[
+
+        ],
+        "familiar":[
+
+        ]
+    },
+    "workExperience":[
+        {
+            "company":{
+                "name":"Unlockable Inc.",
+                "location":"New York, NY",
+                "companyWebsite":"www.unlockable.com"
+            },
+            "positions":[
+                {
+                    "title":"Software Engineer (contract)",
+                    "date":"May 2015 - October 2015",
+                    "details":[
+                        "Web application client-side maintenance and development. Android test application maintenance."
+                    ]
+                }
+            ]
+        }
+    ],
+    "projects":[
+        {
+            "projectTitle":"Elm Planner",
+            "role":"Sole Developer",
+            "timeframe":"April 2015 - June 2015",
+            "description":"A recursive, web-based, cross-platform project planner application written in Elm with support for taking notes in a tree-hierarchy, automatically saving work to local storage in real time, and saving and loading projects between the browser and the user's local machine."
+        }
+    ]
+}

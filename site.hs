@@ -9,11 +9,14 @@ import           Data.List (isSuffixOf,intersperse)
 import           Text.Regex (mkRegex,splitRegex)
 import           Data.Char (toLower,isAlphaNum)
 import           Control.Monad (mfilter)
+import           Resume
 
 --------------------------------------------------------------------------------
 main :: IO ()
 main = do
     E.setLocaleEncoding E.utf8
+    resume <- getResume
+    putStrLn . address . contact $ resume
     hakyll $ do
         tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
 
