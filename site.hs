@@ -10,6 +10,12 @@ import           Text.Regex (mkRegex,splitRegex)
 import           Data.Char (toLower,isAlphaNum)
 import           Control.Monad (mfilter)
 import           Resume
+import           Control.Applicative (empty)
+
+import           Text.Blaze.Html                 (toHtml, toValue, (!))
+import           Text.Blaze.Html.Renderer.String (renderHtml)
+import qualified Text.Blaze.Html5                as H
+import qualified Text.Blaze.Html5.Attributes     as A
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -115,7 +121,6 @@ main = do
                         , listField "projects" (projectCtx tags) (return projects)
                         , constField "title" "Home"
                         , constField "heading" "Robert J. Whitaker"
-                        --, constField "banner" "/images/banner.png"                `mappend`
                         , constField "about" about
                         , baseContext tags
                         ]
@@ -135,14 +140,14 @@ postCtx tags =
     field "url" (fmap (maybe "" $ (:) '/' . cleanIndex) . getRoute . itemIdentifier) `mappend`
     --fieldFromMetadata "heading" "title" (maybe "" id) `mappend`
     teaserField "teaser" "content" `mappend`
-    tagsField "tags" tags `mappend`
+    tagsFieldNonEmpty "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
     baseContext tags `mappend`
     constField "author" "Rob"
 
 projectCtx :: Tags -> Context String
 projectCtx tags =
-    tagsField "tags" tags `mappend`
+    tagsFieldNonEmpty "tags" tags `mappend`
     fieldFromMetadata "imgSrc" "title" (maybe "/images/projects/no-image.png" projectTitleToImgSrc) `mappend`
     baseContext tags
 
@@ -159,6 +164,24 @@ fieldFromMetadata label metaField fn =
     field label $ \item -> do
         metadata <- getMetadata (itemIdentifier item)
         return $ fn (mfilter (not . null) $ lookupString metaField metadata)
+
+getTagsNonEmpty :: Identifier -> Compiler [String]
+getTagsNonEmpty identifier = do
+    tags <- getTags identifier
+    if null tags then
+        empty
+    else
+        return tags
+
+tagsFieldNonEmpty :: String -> Tags -> Context a
+tagsFieldNonEmpty =
+    tagsFieldWith getTagsNonEmpty simpleRenderLink (mconcat . intersperse ", ")
+  where
+    simpleRenderLink :: String -> (Maybe FilePath) -> Maybe H.Html
+    simpleRenderLink _   Nothing         = Nothing
+    simpleRenderLink tag (Just filePath) =
+      Just $ H.a ! A.href (toValue $ toUrl filePath) $ toHtml tag
+
 
 --------------------------------------------------------------------------------
 

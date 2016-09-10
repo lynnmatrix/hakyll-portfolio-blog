@@ -12,5 +12,6 @@ executable site
                   , regex-compat
                   , aeson
                   , bytestring
+                  , blaze-html
   ghc-options:      -threaded
   default-language: Haskell2010
