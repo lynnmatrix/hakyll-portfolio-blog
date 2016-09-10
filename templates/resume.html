@@ -1,0 +1,52 @@
+<h3>Contact</h3>
+$address$
+<br>
+$email$
+<br>
+$website$
+<br>
+$github$
+
+<h3>Education</h3>
+$for(education)$
+    $schoolName$
+    $schoolLocation$
+    $if(gpa)$
+        GPA: $gpa$
+    $endif$
+    <br>
+    $if(scholarships)$
+        $for(scholarships)$
+            Scholarship: $scholarship$
+            <br>
+        $endfor$
+    $endif$
+    $if(otherAchievements)$
+        $for(otherAchievements)$
+            Achievement: $achievement$
+            <br>
+        $endfor$
+    $endif$
+    <br>
+$endfor$
+
+<h3>Work Experience</h3>
+$for(workExperience)$
+    <h4>$companyName$</h4>
+    $companyLocation$
+    $if(companyWebsite)$
+        $companyWebsite$
+    $endif$
+    <br>
+    $for(positions)$
+        Position: $positionTitle$
+        $positionDate$
+        <br>
+        <ul>
+            $for(positionDetails)$
+                <li>$detail$</li>
+            $endfor$
+        </ul>
+    $endfor$
+    <br>
+$endfor$

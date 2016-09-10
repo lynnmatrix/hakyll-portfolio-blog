@@ -9,8 +9,8 @@ import           Data.List (isSuffixOf,intersperse)
 import           Text.Regex (mkRegex,splitRegex)
 import           Data.Char (toLower,isAlphaNum)
 import           Control.Monad (mfilter)
-import           Resume
 import           Control.Applicative (empty)
+import           Resume
 
 import           Text.Blaze.Html                 (toHtml, toValue, (!))
 import           Text.Blaze.Html.Renderer.String (renderHtml)
@@ -22,7 +22,6 @@ main :: IO ()
 main = do
     E.setLocaleEncoding E.utf8
     resume <- getResume
-    putStrLn . address . contact $ resume
     hakyll $ do
         tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
 
@@ -122,6 +121,7 @@ main = do
                         , constField "title" "Home"
                         , constField "heading" "Robert J. Whitaker"
                         , constField "about" about
+                        , resumeCtx resume
                         , baseContext tags
                         ]
 
@@ -138,7 +138,6 @@ main = do
 postCtx :: Tags -> Context String
 postCtx tags =
     field "url" (fmap (maybe "" $ (:) '/' . cleanIndex) . getRoute . itemIdentifier) `mappend`
-    --fieldFromMetadata "heading" "title" (maybe "" id) `mappend`
     teaserField "teaser" "content" `mappend`
     tagsFieldNonEmpty "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
