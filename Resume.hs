@@ -11,7 +11,7 @@ import qualified Data.ByteString.Lazy as BS
 import           GHC.Generics
 import           Control.Monad        (sequence)
 import           Control.Applicative  (empty)
-import           Data.Monoid          (mconcat)
+import           Data.Monoid          (mconcat,(<>))
 import           Hakyll
 
 data Resume = Resume
@@ -20,6 +20,7 @@ data Resume = Resume
     , technicalSkills   :: Skills
     , workExperience    :: [WorkExperience]
     , projects          :: [Project]
+    , extraCurricular   :: ExtraCurricular
     } deriving (Generic, ToJSON, FromJSON)
 
 data ContactInfo = ContactInfo
@@ -72,6 +73,17 @@ data Project = Project
     , description   :: String
     } deriving (Generic, ToJSON, FromJSON)
 
+data ExtraCurricular = ExtraCurricular
+    { activities  :: [Activity]
+    , member      :: [String]
+    , participant :: [String]
+    } deriving (Generic, ToJSON, FromJSON)
+
+data Activity = Activity
+    { activityName    :: String
+    , activityDetails :: String
+    } deriving (Generic, ToJSON, FromJSON)
+
 -------------------------------------------------------------------------------
 -- Hakyll Resume Context --
 -------------------------------------------------------------------------------
@@ -81,6 +93,7 @@ resumeCtx resume = mconcat . map ($ resume) $
     [ contactCtx . contact
     , educationCtx . education
     , workExperienceCtx . workExperience
+    , extraCurricularCtx . extraCurricular
     ]
 
 contactCtx :: ContactInfo -> Context String
@@ -130,6 +143,16 @@ workExperienceCtx workExperienceList =
             ]
         )
         (sequence . map makeItem $ workExperienceList)
+
+extraCurricularCtx :: ExtraCurricular -> Context String
+extraCurricularCtx extraCurricular = mconcat
+    [ listField "activities"
+        (field "activityName" (return . activityName . itemBody) <> field "activityDetails" (return . activityDetails . itemBody))
+        (sequence . map makeItem $ activities extraCurricular)
+    , listField "member" (bodyField "group") (sequence . map makeItem $ member extraCurricular)
+    , listField "participant" (bodyField "event") (sequence . map makeItem $ participant extraCurricular)
+    ]
+
 -------------------------------------------------------------------------------
 -- Helper Functions --
 -------------------------------------------------------------------------------

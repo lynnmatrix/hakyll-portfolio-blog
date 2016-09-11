@@ -63,5 +63,15 @@
             "timeframe":"April 2015 - June 2015",
             "description":"A recursive, web-based, cross-platform project planner application written in Elm with support for taking notes in a tree-hierarchy, automatically saving work to local storage in real time, and saving and loading projects between the browser and the user's local machine."
         }
-    ]
+    ],
+    "extraCurricular":{
+        "activities":[
+            {
+                "activityName":"Eagle Scout",
+                "activityDetails":"Boy Scout Troop 73 · White Plains, NY"
+            }
+        ],
+        "member":["Computer Society", "Game Society", "Generator Magazine (editor)"],
+        "participant":["HackMarist 2014", "HackMIT 2013", "Marist Hackathon 2013", "various others"]
+    }
 }
