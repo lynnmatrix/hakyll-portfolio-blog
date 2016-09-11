@@ -1,0 +1,5 @@
+\documentclass[11pt]{article}
+\begin{document}
+Test file: $contact.address$\\
+Test 2   : $contact.email$
+\end{document}

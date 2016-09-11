@@ -13,5 +13,8 @@ executable site
                   , aeson
                   , bytestring
                   , blaze-html
+                  , pandoc
+                  , text
+                  , directory
   ghc-options:      -threaded
   default-language: Haskell2010

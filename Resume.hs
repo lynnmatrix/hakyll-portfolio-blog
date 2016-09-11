@@ -4,15 +4,20 @@ module Resume
     ( Resume (..)
     , resumeCtx
     , getResume
+    , makePDF
     ) where
 
-import           Data.Aeson           (ToJSON, FromJSON, eitherDecode)
-import qualified Data.ByteString.Lazy as BS
+import           Data.Aeson            (ToJSON, FromJSON, eitherDecode)
+import qualified Data.ByteString.Lazy  as BS
 import           GHC.Generics
-import           Control.Monad        (sequence)
-import           Control.Applicative  (empty)
-import           Data.Monoid          (mconcat,(<>))
+import           Control.Monad         (sequence)
+import           Control.Applicative   (empty)
+import           Data.Monoid           (mconcat,(<>))
 import           Hakyll
+import           Text.Pandoc
+import qualified Data.Text.IO          as Text
+import qualified Text.Pandoc.PDF       as PDF
+import           System.Directory      (createDirectoryIfMissing)
 
 data Resume = Resume
     { contact           :: ContactInfo
@@ -152,6 +157,21 @@ extraCurricularCtx extraCurricular = mconcat
     , listField "member" (bodyField "group") (sequence . map makeItem $ member extraCurricular)
     , listField "participant" (bodyField "event") (sequence . map makeItem $ participant extraCurricular)
     ]
+
+-------------------------------------------------------------------------------
+-- Pandoc PDF Generation --
+-------------------------------------------------------------------------------
+
+makePDF :: IO ()
+makePDF = do
+    resumeJSON <- getResume
+    templateStr <- Text.readFile "templates/resume.latex"
+    let template = either error id $ compileTemplate templateStr
+    let doc = either (error . show) id $ readMarkdown def $ renderTemplate template resumeJSON
+    result <- PDF.makePDF "xelatex" writeLaTeX def doc
+    let pdf = either (error . show) id result
+    createDirectoryIfMissing True "./_site/downloads"
+    BS.writeFile "./_site/downloads/resume.pdf" pdf
 
 -------------------------------------------------------------------------------
 -- Helper Functions --

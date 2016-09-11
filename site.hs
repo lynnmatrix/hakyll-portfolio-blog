@@ -22,6 +22,7 @@ main :: IO ()
 main = do
     E.setLocaleEncoding E.utf8
     resume <- getResume
+    makePDF
     hakyll $ do
         tags <- buildTags ("posts/*" .||. "projects/*") (fromCapture "tags/*/index.html")
 
