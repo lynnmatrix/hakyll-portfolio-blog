@@ -32,7 +32,9 @@ main = do
 
         match "css/*" $ do
             route   idRoute
-            compile compressCssCompiler
+            compile $ getResourceString
+                >>= withItemBody (unixFilter "postcss" ["--use autoprefixer"])
+                >>= withItemBody (return . compressCss)
 
         match "posts/*" $ do
             route tidyRoute
