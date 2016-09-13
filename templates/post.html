@@ -1,16 +1,56 @@
 <article class="post">
     <h1 class="post-title">$title$</h1>
-    <div class="content">$body$</div>
-    <div class="share"></div>
     <div class="info">
-        <i class="fa fa-user" aria-hidden="true"></i> $author$
-        <span class="spacer"></span>
-        <i class="fa fa-calendar" aria-hidden="true"></i> $date$
+        Posted by
+        <a href="$authorUrl$" $if(authorUrlIsExternal)$ target="_blank" $endif$>$author$</a>
+        on
+        $date$
         $if(tags)$
-            <span class="spacer"></span>
-            <i class="fa fa-tags" aria-hidden="true"></i> $tags$
+            <div class="tag-spacer">/</div>
+            <div class="tags">
+                 <i class="fa fa-tags" aria-hidden="true"></i> $tags$
+            </div>
         $endif$
     </div>
+    <div class="content">$body$</div>
+    <hr>
+    <div class="share">
+        Share this: <br>
+        <div class="share-circle fb" title="Share on Facebook"
+            data-endpoint="https://www.facebook.com/sharer/sharer.php?u={{url}}"
+            onclick="openSharePopup.call(this);">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+            <div class="share-highlight"></div>
+        </div>
+        <div class="share-circle twitter" title="Share on Twitter"
+            data-endpoint="https://twitter.com/intent/tweet?text={{title}}&tw_p=tweetbutton&url={{url}}&via={{via}}"
+            onclick="openSharePopup.call(this);">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+            <div class="share-highlight"></div>
+        </div>
+        <div class="share-circle tumblr" title="Share on Tumblr"
+            data-endpoint="https://www.tumblr.com/widgets/share/tool?posttype=link&title={{title}}&content={{url}}&canonicalUrl={{url}}"
+            onclick="openSharePopup.call(this);">
+            <i class="fa fa-tumblr" aria-hidden="true"></i>
+            <div class="share-highlight"></div>
+        </div>
+        <div class="share-circle reddit" title="Share on Reddit"
+            data-endpoint="http://www.reddit.com/submit?url={{url}}&title={{title}}"
+            data-width="875" data-height="750"
+            onclick="openSharePopup.call(this);">
+            <i class="fa fa-reddit-alien" aria-hidden="true"></i>
+            <div class="share-highlight"></div>
+        </div>
+
+        <div class="share-circle g-plus" title="Share on Google+"
+            data-endpoint="//plus.google.com/share?url={{url}}"
+            onclick="openSharePopup.call(this);">
+            <i class="fa fa-google-plus" aria-hidden="true"></i>
+            <div class="share-highlight"></div>
+        </div>
+
+    </div>
+    <hr>
     <div id="disqus_thread"></div>
     <script>
     /**
@@ -33,4 +73,27 @@
     };
     </script>
     <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <script>
+        function openSharePopup() {
+            var height = this.getAttribute("data-height") || 386;
+            var width = this.getAttribute("data-width") || 565;
+            var endpoint = this.getAttribute("data-endpoint");
+
+            var url = window.location.protocol + "//" + window.location.host + "$url$";
+            var title = "$title$";
+            var via = "$twitterVia$"
+
+
+            if(!endpoint) return;
+
+            endpoint = endpoint.replace(/\{\{url\}\}/gi, encodeURIComponent(url));
+            endpoint = endpoint.replace(/\{\{title\}\}/gi, encodeURIComponent(title));
+            endpoint = endpoint.replace(/\{\{via\}\}/gi, encodeURIComponent(via));
+
+            var top = (window.screen.availHeight/2 - height/2) * 0.3;
+            var left = (window.screen.availWidth/2 - width/2) * 0.3;
+
+            window.open(endpoint, "Share", "height="+height+",width="+width+",top="+top+",left="+left);
+        }
+    </script>
 </article>

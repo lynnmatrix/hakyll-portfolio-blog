@@ -139,11 +139,14 @@ main = do
 postCtx :: Tags -> Context String
 postCtx tags =
     field "url" (fmap (maybe "" $ (:) '/' . cleanIndex) . getRoute . itemIdentifier) `mappend`
+    authorUrlIsExternal `mappend`
     teaserField "teaser" "content" `mappend`
     tagsFieldNonEmpty "tags" tags `mappend`
     dateField "date" "%B %e, %Y" `mappend`
     baseContext tags `mappend`
-    constField "author" "Rob"
+    constField "twitterVia" "RobertJWhitaker" `mappend`
+    constField "author" "Rob" `mappend`
+    constField "authorUrl" "/"
 
 projectCtx :: Tags -> Context String
 projectCtx tags =
@@ -164,6 +167,19 @@ fieldFromMetadata label metaField fn =
     field label $ \item -> do
         metadata <- getMetadata (itemIdentifier item)
         return $ fn (mfilter (not . null) $ lookupString metaField metadata)
+
+authorUrlIsExternal :: Context a
+authorUrlIsExternal =
+    field "authorUrlIsExternal" $ \item -> do
+        metadata <- getMetadata (itemIdentifier item)
+        case lookupString "authorUrl" metadata of
+            Just authorUrl ->
+                if isExternal authorUrl then
+                    return ""
+                else
+                    empty
+            Nothing ->
+                empty
 
 getTagsNonEmpty :: Identifier -> Compiler [String]
 getTagsNonEmpty identifier = do

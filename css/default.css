@@ -141,7 +141,7 @@ i {
     background-color: #487FD9;
 }
 
-#sidebar hr {
+hr {
     border: none;
     border-top: 1px solid #777;
 }
@@ -458,12 +458,23 @@ a:hover {
 
 .post .info {
     line-height: 150%;
-    text-align: right;
-    margin: 1.5em 0;
+    text-align: center;
+    margin: 0.2em 0 1.5em 0;
+    font-style: italic;
+    font-size: 90%;
 }
 
-.post .info .spacer {
-    margin-right: 1em;
+.post .tags {
+    display: inline-block;
+}
+
+.post .tags a {
+    text-decoration: underline;
+}
+
+.post .tag-spacer {
+    display: inline-block;
+    margin: 0 0.4em;
 }
 
 .post h1, .post h2, .post h3, .post h4, .post h5, .post h6,
@@ -481,9 +492,78 @@ a:hover {
 
 .post h1.post-title {
     text-align: center;
-    margin: 0.5em 0em;
+    margin: 0.5em 0 0 0;
     font-size: 42px;
 }
+
+.post hr {
+    border: 1px solid #E7E9EE;
+    clear: both;
+}
+
+.post .share {
+    font-weight: bold;
+    margin: 1em 0;
+}
+
+.post .share .share-circle {
+    display: inline-block;
+    font-size: 16px;
+    line-height: 32px;
+    width: 32px;
+    height: 32px;
+    background-color: #202020;
+    border-radius: 100em;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    margin: 0.5em 0.5em 0 0;
+}
+
+.post .share .share-circle.fb {
+    background-color: #3b5998;
+}
+
+.post .share .share-circle.twitter {
+    background-color: #00acee;
+}
+
+.post .share .share-circle.tumblr {
+    background-color: #2c4762;
+}
+
+.post .share .share-circle.reddit {
+    background-color: #cee3f8;
+    border: 1px solid #ccc;
+}
+
+.post .share .share-circle.g-plus {
+    background-color: #dd4b39;
+}
+
+.post .share .share-circle .share-highlight {
+    background-color: rgba(255,255,255,0.4);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.post .share .share-circle:hover .share-highlight {
+    display: block;
+}
+
+.post .share .share-circle i {
+    color: white;
+}
+
+.post .share .share-circle.reddit i {
+    text-shadow: 0 0 3px red;
+}
+
+.post
 
 .teaser h1, .teaser h2, .teaser h3, .teaser h4, .teaser h5, .teaser h6 {
     font-weight: normal;
