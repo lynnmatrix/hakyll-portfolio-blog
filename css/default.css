@@ -8,8 +8,17 @@ html, body {
     background-color: #487FD9;
     background: url("/images/use_your_illusion.png");
     background-attachment: fixed;
-    height: 100%;
     white-space: nowrap;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-spacer {
+    flex: 1 1 100px;
+    max-width: calc(20% - 100px);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -47,33 +56,14 @@ i {
 }
 
 #sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 250px;
-    max-width: 40%;
+    flex: 1 1 100px;
+    min-width: 200px;
     background: #202020;
     white-space: normal;
-    box-shadow: 0px 2px 10px black;
     overflow-x: hidden;
-    overflow-y: hidden;
     color: white;
     box-sizing: border-box;
     padding-bottom: 1.5em;
-}
-
-#sidebar.overflowed:hover {
-    overflow-y: scroll;
-    width: 267px;
-    max-width: calc(40% + 17px);
-}
-
-#sidebar-spacer {
-    margin: 0;
-    width: 240px;
-    max-width: 40%;
-    display: inline-block;
 }
 
 #sidebar .portrait {
@@ -120,20 +110,19 @@ i {
 
 #sidebar nav {
     margin: 0.5em 0 1em;
-    display: flex;
-    flex-wrap: wrap;
+}
+
+#sidebar nav a img {
+    height: 20px;
+    vertical-align: bottom;
 }
 
 #sidebar nav a {
-    flex: 1;
+    display: block;
     padding: 0.5em;
     white-space: nowrap;
-    text-align: left;
+    text-align: center;
     transition: all 0.4s;
-}
-
-#sidebar nav a:nth-child(odd) {
-    text-align: right;
 }
 
 #sidebar nav a:hover, #sidebar a.return-to-home:hover {
@@ -281,18 +270,17 @@ hr {
 
 
 #content {
-    margin: 0;
-    width: 60%;
+    flex: 5 1 300px;
     min-width: 300px;
-    display: inline-block;
-    background-color: white;
-    min-height: 100%;
+    background-color: #ececec;
     white-space: normal;
 }
 
 #content .content-pad {
     padding-left: 2em;
     padding-right: 1.5em;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 footer {
@@ -306,7 +294,7 @@ footer {
 }
 
 .project-card {
-    flex: 1;
+    flex: 1 1 auto;
     max-width: 250px;
     min-width: 200px;
     margin: 1em;
@@ -361,22 +349,21 @@ footer {
     justify-content: space-between;
     flex-wrap: wrap;
 }
-
+/*
 .two-column > div {
     flex: 1;
-}
+}*/
 
 .two-column .posts-column {
-    min-width: 300px;
-    flex-grow: 3;
+    flex: 3 1 60%;
     line-height: 150%;
     font-size: 105%;
+    padding-right: 3em;
+    box-sizing: border-box;
 }
 
 .two-column .projects-column {
-    margin-left: 3em;
-    flex-grow: 1;
-    /*max-width: 20%;*/
+    flex: 1 1 150px;
 }
 
 .post-teaser {
@@ -579,3 +566,9 @@ a:hover {
 .sourceCode.haskell .dt { color: violet; }
 .sourceCode.haskell .kw { color: #ff5555; }
 .sourceCode.haskell .st { color: #ffff55; }
+
+@media (max-width: 550px) {
+    #sidebar .sidebar-fields, #sidebar hr.field-separator {
+        display: none;
+    }
+}

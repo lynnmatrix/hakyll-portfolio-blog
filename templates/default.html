@@ -9,84 +9,88 @@
         <script src="https://use.fontawesome.com/12b37488f5.js"></script>
     </head>
     <body>
-        <div id="sidebar">
-            $if(index)$
-            $else$
-                <a href="/" class="return-to-home"><i class="fa fa-home" aria-hidden="true"></i> Return to home page</a>
-            $endif$
-
-            <div class="portrait">
-                <a href="/">
-                    <img src="/images/portrait.jpg">
-                </a>
-            </div>
-
-            <div class="name"><a href="/">Robert J. Whitaker</a></div>
-
-            <div class="social-buttons">
-                <a href="https://twitter.com/RobertJWhitaker" target="_blank"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
-                <a href="http://www.linkedin.com/pub/robert-whitaker/73/699/218" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-                <a href="https://github.com/robwhitaker/" target="_blank"><i class="fa fa-github-square" aria-hidden="true"></i></a>
-                <a href="/rss.xml" target="_blank"><i class="fa fa-rss-square" aria-hidden="true"></i></a>
-            </div>
-
-            <nav>
-
-                <a href="/portfolio">
-                    <i class="fa fa-briefcase" aria-hidden="true"></i>
-                    Portfolio
-                </a>
-
-                <a href="/archive">
-                    <i class="fa fa-archive" aria-hidden="true"></i>
-                    Archives
-                </a>
-
-            </nav>
-            <hr>
-            <div class="sidebar-fields">
-                <h3><i class="fa fa-envelope" aria-hidden="true"></i> Contact</h3>
-                <div class="contact-row"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Beacon, NY</div>
-                <div class="contact-row">
-                    <i class="fa fa-at" aria-hidden="true"></i>
-                    <a href="mailto:robjameswhitaker@gmail.com" target="_blank" class="smaller">robjameswhitaker@gmail.com</a>
+        <div class="container">
+            <div id="sidebar">
+                $if(index)$
+                $else$
+                    <a href="/" class="return-to-home"><i class="fa fa-home" aria-hidden="true"></i> Return to home page</a>
+                $endif$
+                <div class="portrait">
+                    <a href="/">
+                        <img src="/images/portrait.jpg">
+                    </a>
                 </div>
 
-                <h3><i class="fa fa-certificate" aria-hidden="true"></i> Skills</h3>
-                <div class="skills">
-                    Elm
-                    <div class="skill-bar"><div class="s4-5-bar"></div></div>
-                    Haskell
-                    <div class="skill-bar"><div class="s3-5-bar"></div></div>
-                    JavaScript / HTML / CSS
-                    <div class="skill-bar"><div class="s4-5-bar"></div></div>
-                    Java
-                    <div class="skill-bar"><div class="s3-5-bar"></div></div>
-                    Unity
-                    <div class="skill-bar"><div class="s2-5-bar"></div></div>
+                <div class="name"><a href="/">Robert J. Whitaker</a></div>
+                <nav>
+                    <a href="/downloads/resume.pdf" target="_blank">
+                        <img src="/images/pdf-icon.png">
+                        Download Résumé
+                    </a>
+                </nav>
+                <div class="social-buttons">
+                    <a href="https://twitter.com/RobertJWhitaker" target="_blank"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+                    <a href="http://www.linkedin.com/pub/robert-whitaker/73/699/218" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+                    <a href="https://github.com/robwhitaker/" target="_blank"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+                    <a href="/rss.xml" target="_blank"><i class="fa fa-rss-square" aria-hidden="true"></i></a>
                 </div>
-                <h3><i class="fa fa-tags" aria-hidden="true"></i> Tags</h3>
-                <div class="tag-cloud">
-                    $tagCloud$
+
+                <nav>
+
+                    <a href="/portfolio">
+                        <i class="fa fa-briefcase" aria-hidden="true"></i>
+                        Portfolio
+                    </a>
+
+                    <a href="/archive">
+                        <i class="fa fa-archive" aria-hidden="true"></i>
+                        Archives
+                    </a>
+
+                    <a href="mailto://robjameswhitaker@gmail.com" target="_blank">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        Contact
+                    </a>
+
+                </nav>
+                <hr class="field-separator">
+                <div class="sidebar-fields">
+                    <h3><i class="fa fa-certificate" aria-hidden="true"></i> Skills</h3>
+                    <div class="skills">
+                        Elm
+                        <div class="skill-bar"><div class="s4-5-bar"></div></div>
+                        Haskell
+                        <div class="skill-bar"><div class="s3-5-bar"></div></div>
+                        JavaScript / HTML / CSS
+                        <div class="skill-bar"><div class="s4-5-bar"></div></div>
+                        Java
+                        <div class="skill-bar"><div class="s3-5-bar"></div></div>
+                        Unity
+                        <div class="skill-bar"><div class="s2-5-bar"></div></div>
+                    </div>
+                    <h3><i class="fa fa-tags" aria-hidden="true"></i> Tags</h3>
+                    <div class="tag-cloud">
+                        $tagCloud$
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="sidebar-spacer"></div>
-        <div id="content">
-            $if(heading)$
-                <h1>$heading$</h1>
-            $endif$
-            $if(banner)$
-                <img src="$banner$" class="banner">
-            $endif$
-            <div class="content-pad">
-                $body$
-                <hr>
-                <footer>
-                    Site proudly generated by
-                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-                </footer>
+            <div id="content">
+                $if(heading)$
+                    <h1>$heading$</h1>
+                $endif$
+                $if(banner)$
+                    <img src="$banner$" class="banner">
+                $endif$
+                <div class="content-pad">
+                    $body$
+                    <hr>
+                    <footer>
+                        Site proudly generated by
+                        <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                    </footer>
+                </div>
             </div>
+            <div class="flex-spacer"></div>
         </div>
         <script>
             var sidebar = document.getElementById("sidebar");
